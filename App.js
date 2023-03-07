@@ -1,10 +1,19 @@
 import { useState } from "react";
-import { Button, StyleSheet, TextInput, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Button } from "react-native";
 import GoalInput from "./components/GoalInput";
 import GoalItem from "./components/GoalItem";
 
 export default function App() {
   const [goalList, setGoalList] = useState([]);
+  const [isVisible, setIsVisisble] = useState(false);
+
+  function startAddGoal() {
+    setIsVisisble(true);
+  }
+
+  function endAddGoal() {
+    setIsVisisble(false);
+  }
 
   function goalAddHandler(enteredText, setEnteredText) {
     enteredText &&
@@ -13,15 +22,22 @@ export default function App() {
         { text: enteredText, id: Math.random().toString() },
       ]);
     setEnteredText("");
+    setIsVisisble(false);
   }
 
   function goalDeleteHandler(id) {
-    console.log(id);
     setGoalList((currentGoal) => currentGoal.filter((item) => item.id !== id));
   }
   return (
     <View style={styles.appContainer}>
-      <GoalInput goalAddHandler={goalAddHandler} />
+      <Button title={"Add New Goal"} onPress={startAddGoal} />
+      {isVisible && (
+        <GoalInput
+          visisble={isVisible}
+          onEndAddGoal={endAddGoal}
+          goalAddHandler={goalAddHandler}
+        />
+      )}
       <View style={styles.goalContainer}>
         <FlatList
           data={goalList}
@@ -43,5 +59,9 @@ const styles = StyleSheet.create({
   },
   goalContainer: {
     flex: 3,
+  },
+  goalButton: {
+    backgroundColor: "1e90ff",
+    color: "#FFFFFF",
   },
 });
