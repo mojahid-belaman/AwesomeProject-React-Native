@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, StyleSheet, TextInput, View } from "react-native";
+import { Button, StyleSheet, TextInput, View, Modal } from "react-native";
 
 const GoalInput = (props) => {
   const [enteredText, setEnteredText] = useState("");
@@ -9,18 +9,30 @@ const GoalInput = (props) => {
   }
 
   return (
-    <View style={styles.inputContainer}>
-      <TextInput
-        style={styles.textInput}
-        placeholder="Enter Your Goals!"
-        onChangeText={goalInputHandler}
-        value={enteredText}
-      />
-      <Button
-        title="Add Goal"
-        onPress={() => props.goalAddHandler(enteredText, setEnteredText)}
-      />
-    </View>
+    <Modal visible={props.visisble} animationType="slide">
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Enter Your Goals!"
+          onChangeText={goalInputHandler}
+          value={enteredText}
+        />
+        <View style={styles.btnContainer}>
+          <View style={styles.btn}>
+            <Button
+              title="Add Goal"
+              onPress={() => props.goalAddHandler(enteredText, setEnteredText)}
+            />
+          </View>
+          <View style={styles.btn}>
+            <Button
+              title="Close"
+              onPress={() => props.onEndAddGoal()}
+            />
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 };
 
@@ -29,19 +41,23 @@ export default GoalInput;
 const styles = StyleSheet.create({
   inputContainer: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
+    padding: 16,
   },
   textInput: {
     borderWidth: 1,
     borderColor: "#87cefa",
     borderRadius: 5,
-    width: "70%",
-    marginRight: 10,
+    width: "100%",
     padding: 8,
   },
+  btnContainer: {
+    flexDirection: "row",
+    marginTop: 16,
+  },
+  btn: {
+    width: 100,
+    marginHorizontal: 16,
+  }
 });
